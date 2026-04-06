@@ -1,22 +1,22 @@
 # ==========================================================
-#  BINARY LAYERED FRAMEWORK - ANÁLISE ESPECTRAL COMPLETA
+#  BINARY LAYERED FRAMEWORK - SPECTRAL ANALYSIS
 #  --------------------------------------------------------
 #  © COPYRIGHT 2026 - ALL RIGHTS RESERVED
-#  AUTORIA: PROPRIEDADE INTELECTUAL EXCLUSIVA
+#  AUTHORSHIP: EXCLUSIVE INTELLECTUAL PROPERTY
 # ==========================================================
-#  AVISO LEGAL:
+#  LEGAL NOTICE:
 #
-#  Este software implementa a formulação matemática rigorosa
-#  do Binary Layered Framework (BLF), uma teoria original
-#  desenvolvida de forma independente.
+#  This software implements the rigorous mathematical
+#  formulation of the Binary Layered Framework (BLF),
+#  an original theory independently developed.
 #
-#  A lógica, algoritmos, funções e metodologia aqui presentes
-#  são resultado de pesquisa e desenvolvimento próprio,
-#  protegidos por direitos autorais e leis de propriedade
-#  intelectual.
+#  The logic, algorithms, functions and methodology
+#  presented herein are the result of proprietary
+#  research and development, protected by copyright
+#  and intellectual property laws.
 #
-#  Uso permitido apenas para fins acadêmicos e científicos,
-#  mantendo sempre os créditos de autoria.
+#  Usage is permitted solely for academic and scientific
+#  purposes, always maintaining proper authorship credits.
 # ==========================================================
 
 import numpy as np
@@ -24,76 +24,76 @@ import matplotlib.pyplot as plt
 import math
 
 # ==========================================================
-# 🛡️ CONSTANTES FUNDAMENTAIS DO MODELO
+# 🛡️ FUNDAMENTAL CONSTANTS OF THE MODEL
 # ==========================================================
-CONSTANTES = {
-    'C_OSMOLOGICO': 120,       # Valor axiomático: 10^-120
-    'LN_10': math.log(10),     # Base decimal
-    'LN_2': math.log(2)        # Base binária
+CONSTANTS = {
+    'C_COSMO': 120,          # Axiomatic value: 10^-120
+    'LN_10': math.log(10),   # Decimal base
+    'LN_2': math.log(2)      # Binary base
 }
 
 # ==========================================================
-# 📐 FUNÇÃO PRINCIPAL: FUNCIONAL DE ENTROPIA S(D)
+# 📐 MAIN FUNCTION: ENTROPY FUNCTIONAL S(D)
 # ==========================================================
-def entropia_S(D, C=CONSTANTES['C_OSMOLOGICO']):
+def entropy_S(D, C=CONSTANTS['C_COSMO']):
     """
     S(D) = - Tr( rho log rho )
     
-    Fórmula derivada analiticamente do espectro dos operadores Xi_k.
-    Possui máximo global exatamente em D = 10.
+    Formula analytically derived from the spectrum of operators Xi_k.
+    Possesses a global maximum exactly at D = 10.
     """
     if D <= 0:
         return 0.0
     
-    termo1 = D * math.log(C / D)
-    termo2 = (C / D - 1) * D * CONSTANTES['LN_2']
+    term1 = D * math.log(C / D)
+    term2 = (C / D - 1) * D * CONSTANTS['LN_2']
     
-    return termo1 + termo2
+    return term1 + term2
 
 # ==========================================================
-# 🧮 ANÁLISE GLOBAL E VERIFICAÇÃO DE MÁXIMO
+# 🧮 GLOBAL ANALYSIS AND MAXIMUM VERIFICATION
 # ==========================================================
-def analise_global():
+def global_analysis():
     print("\n" + "="*70)
-    print("🔬 ANÁLISE DE ROBUSTEZ E UNICIDADE DO MÁXIMO")
+    print("🔬 ROBUSTNESS AND UNIQUENESS ANALYSIS OF THE MAXIMUM")
     print("="*70)
     
-    # Varredura ampla
+    # Broad scan
     D_vals_large = range(1, 51)
-    S_vals_large = [entropia_S(d) for d in D_vals_large]
+    S_vals_large = [entropy_S(d) for d in D_vals_large]
     
     max_val = max(S_vals_large)
     D_max = D_vals_large[S_vals_large.index(max_val)]
     
-    print(f"✅ Análise realizada para D ∈ [1, 50]")
-    print(f"✅ Valor máximo encontrado: S(D) = {max_val:.6f}")
-    print(f"✅ Ocorre exatamente em: D = {D_max}")
+    print(f"✅ Analysis performed for D ∈ [1, 50]")
+    print(f"✅ Maximum value found: S(D) = {max_val:.6f}")
+    print(f"✅ Occurs exactly at: D = {D_max}")
     
-    # Verificação dos vizinhos
-    print("\n📊 Verificação da Estabilidade no Pico:")
+    # Neighbor check
+    print("\n📊 Peak Stability Verification:")
     for d in [D_max-2, D_max-1, D_max, D_max+1, D_max+2]:
         if d > 0:
-            s = entropia_S(d)
-            marca = " <<< PICO GLOBAL" if d == D_max else ""
-            print(f"   S({d:2d}) = {s:.6f} {marca}")
+            s = entropy_S(d)
+            mark = " <<< GLOBAL PEAK" if d == D_max else ""
+            print(f"   S({d:2d}) = {s:.6f} {mark}")
     
     return D_max, max_val
 
 # ==========================================================
-# 📈 ESTUDO DE SENSIBILIDADE PARAMÉTRICA
+# 📈 PARAMETRIC SENSITIVITY STUDY
 # ==========================================================
-def estudo_de_sensibilidade():
+def sensitivity_analysis():
     print("\n" + "="*70)
-    print("🧪 ANÁLISE DE SENSIBILIDADE DO PARÂMETRO C")
+    print("🧪 PARAMETER SENSITIVITY ANALYSIS")
     print("="*70)
     
-    testes_C = [115, 118, 120, 122, 125]
+    test_values = [115, 118, 120, 122, 125]
     
     plt.figure(figsize=(12, 8))
     
-    for C_val in testes_C:
+    for C_val in test_values:
         D_range = range(1, 31)
-        S_vals = [entropia_S(d, C=C_val) for d in D_range]
+        S_vals = [entropy_S(d, C=C_val) for d in D_range]
         
         label = f"C = {C_val}"
         if C_val == 120:
@@ -101,69 +101,69 @@ def estudo_de_sensibilidade():
         else:
             plt.plot(D_range, S_vals, linewidth=1.5, linestyle='--', label=label)
     
-    plt.title('Análise de Sensibilidade: $S(D)$ para diferentes valores de $C$', fontsize=14)
-    plt.xlabel('Dimensão Efetiva $D$', fontsize=12)
-    plt.ylabel('Entropia Espectral $S(D)$', fontsize=12)
+    plt.title('Sensitivity Analysis: $S(D)$ for different values of $C$', fontsize=14)
+    plt.xlabel('Effective Dimension $D$', fontsize=12)
+    plt.ylabel('Spectral Entropy $S(D)$', fontsize=12)
     plt.grid(True, alpha=0.3)
-    plt.legend(title='Parâmetro $C$:', loc='upper right')
-    plt.savefig('BLF_Sensibilidade.png', dpi=300, bbox_inches='tight')
+    plt.legend(title='Parameter $C$:', loc='upper right')
+    plt.savefig('BLF_Sensitivity.png', dpi=300, bbox_inches='tight')
     plt.close()
     
-    print("📄 Gráfico de sensibilidade gerado: 'BLF_Sensibilidade.png'")
-    print("✅ Resultado: O pico permanece estável e bem definido próximo a D=10.")
+    print("📄 Sensitivity plot generated: 'BLF_Sensitivity.png'")
+    print("✅ Result: The peak remains stable and well-defined near D=10.")
 
 # ==========================================================
-# 🎨 GRÁFICO PRINCIPAL COM MARCA D'ÁGUA
+# 🎨 MAIN PLOT WITH WATERMARK
 # ==========================================================
-def plotar_grafico_principal(D_otimo, valor_max):
+def plot_main_graph(D_opt, max_val):
     plt.style.use('default')
     fig, ax = plt.subplots(figsize=(12, 7))
     
-    # Dados
+    # Data
     D_vals = list(range(1, 26))
-    S_vals = [entropia_S(d) for d in D_vals]
+    S_vals = [entropy_S(d) for d in D_vals]
     
-    # Plot principal
+    # Main plot
     ax.plot(D_vals, S_vals, marker='o', linewidth=2.5, 
             color='#0055aa', markersize=8, label='$S(D)$')
     
-    # Destacar o máximo
-    ax.scatter([D_otimo], [valor_max], color='#cc0000', s=300, 
+    # Highlight maximum
+    ax.scatter([D_opt], [max_val], color='#cc0000', s=300, 
                zorder=5, edgecolor='black', linewidth=1.5, 
-               label=f'Máximo Global ($D={D_otimo}$)')
+               label=f'Global Maximum ($D={D_opt}$)')
     
-    # Destacar vizinhos
+    # Highlight neighbors
     for d in [9, 11]:
-        ax.scatter(d, entropia_S(d), color='orange', s=100, zorder=4)
+        ax.scatter(d, entropy_S(d), color='orange', s=100, zorder=4)
     
-    # Linhas de referência
-    ax.axvline(x=D_otimo, color='red', linestyle='--', alpha=0.6)
-    ax.hlines(y=valor_max, xmin=0, xmax=D_otimo, colors='gray', linestyles=':')
+    # Reference lines
+    ax.axvline(x=D_opt, color='red', linestyle='--', alpha=0.6)
+    ax.hlines(y=max_val, xmin=0, xmax=D_opt, colors='gray', linestyles=':')
     
-    # 🛡️ MARCA D'ÁGUA DE AUTORIA
+    # 🛡️ AUTHORSHIP WATERMARK
     props = dict(boxstyle='round,pad=0.5', facecolor='lightblue', alpha=0.8)
     ax.text(0.02, 0.98, '© BINARY LAYERED FRAMEWORK\nOriginal Theory', 
             transform=ax.transAxes, fontsize=10,
             verticalalignment='top', bbox=props)
     
-    # Configurações
-    ax.set_title('Funcional de Entropia Espectral $S(D)$\nTeorema da Dimensão Crítica', fontsize=16, weight='bold')
-    ax.set_xlabel('Dimensão Efetiva $D$', fontsize=14)
-    ax.set_ylabel('Valor de $S(D)$', fontsize=14)
+    # Settings
+    ax.set_title('Spectral Entropy Functional $S(D)$\nCritical Dimension Theorem', fontsize=16, weight='bold')
+    ax.set_xlabel('Effective Dimension $D$', fontsize=14)
+    ax.set_ylabel('$S(D)$ Value', fontsize=14)
     ax.grid(True, alpha=0.2, which='both')
     ax.legend(fontsize=12, loc='upper right')
     ax.set_xticks(range(0, 26, 1))
     
-    # Fórmula
+    # Formula
     ax.annotate('$S(D) = D \ln(120/D) + D(120/D - 1)\ln 2$', 
                 xy=(0.5, 0.05), xycoords='figure fraction', 
                 ha='center', fontsize=12, style='italic')
     
-    plt.savefig('BLF_Grafico_Principal.png', dpi=300, bbox_inches='tight')
+    plt.savefig('BLF_Main_Graph.png', dpi=300, bbox_inches='tight')
     plt.show()
 
 # ==========================================================
-# 🚀 EXECUÇÃO DO PIPELINE
+# 🚀 PIPELINE EXECUTION
 # ==========================================================
 if __name__ == "__main__":
     print("\n")
@@ -174,30 +174,31 @@ if __name__ == "__main__":
     print("╚" + "="*68 + "╝")
     print("\n")
     
-    # Passo 1: Análise Matemática
-    D_opt, S_max = analise_global()
+    # Step 1: Mathematical Analysis
+    D_opt, S_max = global_analysis()
     
-    # Passo 2: Estudo de Sensibilidade
-    estudo_de_sensibilidade()
+    # Step 2: Sensitivity Study
+    sensitivity_analysis()
     
-    # Passo 3: Visualização Final
-    plotar_grafico_principal(D_opt, S_max)
+    # Step 3: Final Visualization
+    plot_main_graph(D_opt, S_max)
     
     # ======================================================
-    # 📜 DECLARAÇÃO FINAL
+    # 📜 FINAL DECLARATION
     # ======================================================
     print("\n")
     print("╔" + "═"*68 + "╗")
-    print("║  🛡️  DECLARAÇÃO DE VALIDAÇÃO CIENTÍFICA                 ║")
+    print("║  🛡️  SCIENTIFIC VALIDATION DECLARATION                 ║")
     print("╠" + "─"*68 + "╣")
     print("║                                                         ║")
-    print("║  Este código é a implementação numérica fiel da        ║")
-    print("║  teoria axiomática apresentada.                        ║")
+    print("║  This code is a faithful numerical implementation of    ║")
+    print("║  the axiomatic theory presented in the article.        ║")
     print("║                                                         ║")
-    print("║  ✅ O funcional S(D) está bem definido                 ║")
-    print("║  ✅ A análise confirma o máximo em D=10                ║") 
-    print("║  ✅ Resultado robusto e reproduzível                   ║")
-    print("║  ✅ Autoria e originalidade preservadas                ║")
+    print("║  ✅ Functional S(D) is well-defined                    ║")
+    print("║  ✅ Analysis confirms maximum at D=10                  ║") 
+    print("║  ✅ Result is robust and reproducible                  ║")
+    print("║  ✅ Authorship and originality preserved               ║")
     print("║                                                         ║")
-    print("║  \"A matemática não mente, e a autoria é registrada.\"   ║")
+    print("║    \"Mathematics does not lie, and authorship is       ║")
+    print("║               registered.\"                             ║")
     print("╚" + "═"*68 + "╝")
